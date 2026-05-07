@@ -42,6 +42,21 @@ function checkResult(previousEndDegree) {
   return result;
 }
 
+function saveResult(gameName, outcome) {
+  // Get existing results from memory (or an empty array if none exist)
+  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+
+  // Add the new result
+  results.push({
+    game: gameName,
+    result: outcome,
+    date: new Date().toLocaleString(),
+  });
+
+  // Save it back to memory
+  localStorage.setItem('gameResults', JSON.stringify(results));
+}
+
 function wheelOfFortune(selector) {
   const node = document.querySelector(selector);
   if (!node) return;
@@ -86,6 +101,7 @@ function wheelOfFortune(selector) {
       );
       setTimeout(function() { animation = false; }, 4100);
       setTimeout(function() { previousEndDegree = newEndDegree; }, 4100);
+      saveResult('wheel of fortune', checkResult(newEndDegree));
     } else {
       console.log("The wheel is already spinning")
     }
