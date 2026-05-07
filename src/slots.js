@@ -57,6 +57,7 @@ function animateWheels(wheels) {
     animationId = requestAnimationFrame(() => animateWheels(wheels));
   } else {
     isSpinning = false;
+    getResult();
   }
 }
 
@@ -73,7 +74,7 @@ function startSlowdown(wheels) {
         clearInterval(slowdownInterval);
         wheel.isSpinning = false;
 
-        // === NORMALIZE current angle to –180…+180 ===
+        // === NORMALIZE current angle to –180+180 ===
         let currentAngle = wheel.angle % 360;
         if (currentAngle > 180) currentAngle -= 360;
         if (currentAngle < -180) currentAngle += 360;
@@ -89,7 +90,7 @@ function startSlowdown(wheels) {
           const absDiff = Math.abs(diff);
           if (absDiff < minDiff) {
             minDiff = absDiff;
-            bestTarget = currentAngle + diff; // absolute target in –180…+180
+            bestTarget = currentAngle + diff; // absolute target in –180+180
           }
         });
 
@@ -121,6 +122,61 @@ function spinWheel() {
 
   animateWheels(wheels);
   setTimeout(() => startSlowdown(wheels), getRandomTime());
+}
+
+function saveResult(gameName, outcome) {
+  // Get existing results from memory (or an empty array if none exist)
+  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+
+  // Add the new result
+  results.push({
+    game: gameName,
+    result: outcome,
+    date: new Date().toLocaleString(),
+  });
+
+  // Save it back to memory
+  localStorage.setItem('gameResults', JSON.stringify(results));
+}
+
+function getResult() {
+  const wheels = document.querySelectorAll('.Wheel');
+  let turningState = [];
+  wheels.forEach((wheel) => {
+    turningState.push(parseInt(wheel.angle, 10));
+  });
+  turningState.forEach((num) => {
+    console.log(num);
+  })
+  let tln = 0;
+  let cnt = 0;
+  turningState.forEach((num) => {
+    if (num + 10 < 0) {
+      num = -120;
+    } else if (num - 150 < -120) {
+      num = 0;
+    } else {
+      num = 120;
+    }
+  })
+  turningState.forEach((num) => {
+    if (cnt === 0) {
+      tln = num;
+      cnt += 1;
+    } else if (tln === num) {
+      cnt += 1;
+    }
+  })
+  if (cnt === 3) {
+    //console.log("you win!!!!!");
+    saveResult('slots', 'win');
+  } else {
+    //console.log("You lost all your money haha!!!!!");
+    saveResult('slots', 'loss');
+  }
+  // cherry - 0
+  // bell - 120
+  // 7 - -120
 }
 
 // Optional: Auto-initialize on DOM load
