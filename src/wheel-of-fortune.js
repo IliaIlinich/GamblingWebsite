@@ -76,7 +76,7 @@ function wheelOfFortune(selector) {
       while (newEndDegree >= 360) {
         newEndDegree -= 360;
       }
-      //console.log(previousEndDegree, newEndDegree);
+      console.log(previousEndDegree, newEndDegree);
 
       while (checkResult(newEndDegree) !== "lost it all") {
         randomAdditionalDegrees = Math.random() * 360 + 1800;
@@ -85,7 +85,7 @@ function wheelOfFortune(selector) {
           newEndDegree -= 360;
         }
       }
-      //console.log(previousEndDegree, newEndDegree);
+      console.log(previousEndDegree, newEndDegree);
       animation = wheel.animate(
         [
           { transform: `rotate(${previousEndDegree}deg)` },
@@ -103,7 +103,7 @@ function wheelOfFortune(selector) {
       setTimeout(function() { previousEndDegree = newEndDegree; }, 4100);
       saveResult('wheel of fortune', checkResult(newEndDegree));
     } else {
-      //console.log("The wheel is already spinning")
+      console.log("The wheel is already spinning")
     }
   });
 }

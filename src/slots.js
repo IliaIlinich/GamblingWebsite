@@ -63,7 +63,7 @@ function animateWheels(wheels) {
 
 // Start slowdown → snap to nearest symbol
 function startSlowdown(wheels) {
-  const stoppingInterval = 1000;
+  const stoppingInterval = 100;
   wheels.forEach((wheel) => {
     let currentDuration = wheel.currentDuration;
     const slowdownInterval = setInterval(() => {
