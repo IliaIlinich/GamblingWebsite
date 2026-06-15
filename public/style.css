@@ -1,5 +1,9 @@
+/* ========================================
+   GLOBAL & LAYOUT CONFIGURATION
+   ======================================== */
+
 body {
-    padding: 5cqi;
+    padding: 5cqi; /* Container query inline-size for responsive padding */
     margin: 0;
     height: 100vh;
     display: flex;
@@ -10,6 +14,16 @@ body {
     gap: 30px;
     font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+* {
+    /* Ensures padding and borders are included in the element's total width and height */
+    box-sizing: border-box;
+}
+
+/* ========================================
+   NAVIGATION SIDEBAR
+   ======================================== */
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -19,7 +33,7 @@ ul {
     width: 130px;
     background-color: #151621;
     height: 100%;
-    position: fixed;
+    position: fixed; /* Anchors the navigation to the viewport */
 }
 
 li a {
@@ -33,27 +47,37 @@ li a:hover {
     background-color: #474747;
     color: white;
 }
-.coin-heads {
+
+/* ========================================
+   3D TRANSFORMATION CLASSES (COIN FLIP)
+   ======================================== */
+
+.coin-heads, .coin-tails {
     display: flex;
     width: 100px;
     height: 100px;
-    transform-style: preserve-3d;
+    transform-style: preserve-3d; /* Establishes a 3D rendering context for children */
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.coin-heads {
     transform: rotateX(0deg) translateZ(0px);
 }
+
 .coin-tails {
-    display: flex;
-    width: 100px;
-    height: 100px;
-    transform-style: preserve-3d;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    transform: rotateX(0deg) translateZ(180px);
+    transform: rotateX(0deg) translateZ(180px); /* Offsets the tails face in 3D space */
 }
+
+/* ========================================
+   SLOT MACHINE MECHANICS
+   ======================================== */
+
 .reel-container {
     display: flex;
     gap: 20px;
     margin-bottom: 10px;
 }
+
 .Wheel {
     width: 120px;
     height: 120px;
@@ -61,8 +85,8 @@ li a:hover {
     position: relative;
     transform-style: preserve-3d;
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-
 }
+
 .symbol {
     position: absolute;
     width: 100%;
@@ -73,18 +97,19 @@ li a:hover {
     font-size: 48px;
     color: white;
     background: #151621;
-    backface-visibility: hidden;
+    backface-visibility: hidden; /* Prevents rendering of the element's rear face */
     margin: 0;
 }
-.symbol:nth-child(1) {
-    transform: rotateX(0deg) translateZ(60px);
-}
-.symbol:nth-child(2) {
-    transform: rotateX(120deg) translateZ(60px);
-}
-.symbol:nth-child(3) {
-    transform: rotateX(240deg) translateZ(60px);
-}
+
+/* Cylindrical mapping of symbols at 120-degree intervals */
+.symbol:nth-child(1) { transform: rotateX(0deg) translateZ(60px); }
+.symbol:nth-child(2) { transform: rotateX(120deg) translateZ(60px); }
+.symbol:nth-child(3) { transform: rotateX(240deg) translateZ(60px); }
+
+/* ========================================
+   USER INTERFACE ELEMENTS
+   ======================================== */
+
 button {
     padding: 12px 30px;
     font-size: 18px;
@@ -95,37 +120,36 @@ button {
     cursor: pointer;
     margin-top: 10px;
 }
+
 button:disabled {
     background: #666;
-    cursor: not-allowed;
+    cursor: not-allowed; /* UI feedback for inactive state during animations */
 }
 
-.top-panel {
+.top-panel, .bottom-panel {
     position: fixed;
     left: 0;
-    top: 0;
     width: 100%;
     background-color: #151621;
     color: white;
     text-align: center;
 }
-.bottom-panel {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: #151621;
-    color: white;
-    text-align: center;
-}
+
+.top-panel { top: 0; }
+.bottom-panel { bottom: 0; }
 
 .app h1 {
     color: white;
     display: flex;
 }
 
+/* ========================================
+   WHEEL OF FORTUNE (TRIGONOMETRIC UI)
+   ======================================== */
+
+/* Utilizes :where to manage specificity */
 :where(.ui-wheel-of-fortune) {
-    --_items: 12;
+    --_items: 12; /* State variable defining total wheel segments */
     all: unset;
     aspect-ratio: 1 / 1;
     container-type: inline-size;
@@ -133,10 +157,12 @@ button:disabled {
     display: grid;
     position: relative;
     width: 40%;
+
+    /* Indicator pointer generation using CSS polygons and trigonometry */
     &::after {
-        aspect-ratio: 1/cos(30deg);
+        aspect-ratio: 1 / cos(30deg);
         background-color: crimson;
-        clip-path: polygon(50% 100%,100% 0,0 0);
+        clip-path: polygon(50% 100%, 100% 0, 0 0);
         content: "";
         height: 4cqi;
         position: absolute;
@@ -155,18 +181,24 @@ button:disabled {
 
         li {
             align-content: center;
+            /* Dynamic width calculation based on segment count */
             aspect-ratio: 1 / calc(2 * tan(180deg / var(--_items)));
+
+            /* Hue calculation mapped to segment index */
             background: hsl(calc(360deg / var(--_items) * calc(var(--_idx))), 100%, 75%);
             clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
             display: grid;
             font-size: 5cqi;
             grid-area: 1 / -1;
             padding-left: 1ch;
+
+            /* Rotational mapping based on index */
             rotate: calc(360deg / var(--_items) * calc(var(--_idx) - 1));
             transform-origin: center right;
             user-select: none;
             width: 50cqi;
 
+            /* Index variable assignment */
             &:nth-of-type(1) { --_idx: 1; }
             &:nth-of-type(2) { --_idx: 2; }
             &:nth-of-type(3) { --_idx: 3; }
@@ -183,7 +215,9 @@ button:disabled {
     }
 }
 
-* { box-sizing: border-box; }
+/* ========================================
+   FORM & DATA TABLE STYLES
+   ======================================== */
 
 :where(.form) {
     display: flex;
@@ -193,17 +227,18 @@ button:disabled {
     font-size: large;
 }
 
+.container {
+    width: 100%;
+    height: 60em;
+}
+
 #resultsTable {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Enforces single-line borders between cells */
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 15px;
     color: #ffffff;
     text-align: left;
-}
-.container {
-    width: 100%;
-    height: 60em;
 }
 
 #resultsTable th {
@@ -234,21 +269,25 @@ h2 {
     color: white;
 }
 
-#email {
+#email, #text {
     margin: 1em;
 }
-#text {
-    margin: 1em;
-}
+
+/* ========================================
+   MULTIMEDIA CONTAINERS
+   ======================================== */
+
 .app-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
 video {
     position: relative;
 }
+
 img {
     width: 32em;
     height: 18em;
