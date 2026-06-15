@@ -49,26 +49,6 @@ li a:hover {
 }
 
 /* ========================================
-   3D TRANSFORMATION CLASSES (COIN FLIP)
-   ======================================== */
-
-.coin-heads, .coin-tails {
-    display: flex;
-    width: 100px;
-    height: 100px;
-    transform-style: preserve-3d; /* Establishes a 3D rendering context for children */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-}
-
-.coin-heads {
-    transform: rotateX(0deg) translateZ(0px);
-}
-
-.coin-tails {
-    transform: rotateX(0deg) translateZ(180px); /* Offsets the tails face in 3D space */
-}
-
-/* ========================================
    SLOT MACHINE MECHANICS
    ======================================== */
 
